@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mess Mill Manager </title>
+
+<link rel="stylesheet" href="messmanager.css">
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+        🏠 Mess<span>Manager </span>
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <button class="active"
+                onclick="showPage('dashboard',this)">
+                📊 Dashboard
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('members',this)">
+                👥 Members
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('meals',this)">
+                🍚 Daily Meals
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('bazar',this)">
+                🛒 Bazar
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('expenses',this)">
+                💰 Expenses
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('deposits',this)">
+                💵 Add / Payment
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('calculation',this)">
+                🧮 Final Calculation
+            </button>
+        </li>
+
+        <li>
+            <button onclick="showPage('reports',this)">
+                📄 Reports
+            </button>
+        </li>
+
+        <li>
+            <button onclick="toggleDark()">
+                🌙 Dark Mode
+            </button>
+        </li>
+        <li>
+    <button onclick="resetAllData()" style="color:#fca5a5;">
+        🗑️ Reset All Data
+    </button>
+</li>
+
+    </ul>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+    <div class="top-left">
+
+        <button class="mobile-menu"
+            onclick="toggleSidebar()">
+            ☰
+        </button>
+
+        <h2 id="pageTitle">
+            Dashboard
+        </h2>
+
+    </div>
+
+    <div class="admin">
+        <span>Admin</span>
+        <div class="avatar">A</div>
+    </div>
+
+</header>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page active">
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-icon">👥</div>
+            <div class="card-title">Total Members</div>
+            <div class="card-value" id="totalMembers">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🍚</div>
+            <div class="card-title">Total Meals</div>
+            <div class="card-value" id="totalMealsDashboard">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💵</div>
+            <div class="card-title">Total Joma</div>
+            <div class="card-value">
+                ৳ <span id="totalDeposit">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <div class="card-title">Total Cost</div>
+            <div class="card-value">
+                ৳ <span id="totalCost">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-title">Meal Rate</div>
+            <div class="card-value">
+                ৳ <span id="dashboardRate">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Total Due</div>
+            <div class="card-value">
+                ৳ <span id="dashboardDue">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Total Refund</div>
+            <div class="card-value">
+                ৳ <span id="dashboardRefund">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                Other Expense / Active Member
+            </div>
+            <div class="card-value">
+                ৳ <span id="dashboardExpensePerMember">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <div class="table-box">
+
+            <div class="table-header">
+                <h3>Members</h3>
+
+                <button class="btn btn-primary"
+                    onclick="showPage('members')">
+                    + Add Member
+                </button>
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Mill No</th>
+                        <th>Name</th>
+                        <th>Meals</th>
+                        <th>Joma</th>
+                        <th>Other Exp.</th>
+                        <th>Final Bill</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="dashboardMembers"></tbody>
+
+            </table>
+
+        </div>
+
+        <div class="table-box">
+
+            <h3 style="margin-bottom:15px">
+                Quick Summary
+            </h3>
+
+            <p style="margin:12px 0">
+                👥 Active Members:
+                <b id="summaryActiveMembers">0</b>
+            </p>
+
+            <p style="margin:12px 0">
+                🍚 Meals:
+                <b id="summaryMeals">0</b>
+            </p>
+
+            <p style="margin:12px 0">
+                💵 Joma:
+                <b>৳ <span id="summaryDeposit">0</span></b>
+            </p>
+
+            <p style="margin:12px 0">
+                🛒 Bazar:
+                <b>৳ <span id="summaryBazar">0</span></b>
+            </p>
+
+            <p style="margin:12px 0">
+                💰 Other Expense:
+                <b>৳ <span id="summaryExpense">0</span></b>
+            </p>
+
+            <p style="margin:12px 0">
+                🧮 Meal Rate:
+                <b>৳ <span id="summaryRate">0</span></b>
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- MEMBERS -->
+
+<section id="members" class="page">
+
+    <div class="form-box">
+
+        <h3>Add New Member</h3>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Mill Number *</label>
+                <input id="memberMill" placeholder="M-001">
+            </div>
+
+            <div class="input-group">
+                <label>Full Name *</label>
+                <input id="memberName" placeholder="Rahim">
+            </div>
+
+            <div class="input-group">
+                <label>Phone</label>
+                <input id="memberPhone" placeholder="01XXXXXXXXX">
+            </div>
+
+            <div class="input-group">
+                <label>Address</label>
+                <input id="memberAddress" placeholder="Address">
+            </div>
+
+            <div class="input-group">
+                <label>Joining Date</label>
+                <input id="memberJoining" type="date">
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-primary"
+                onclick="addMember()">
+                + Add Member
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <div class="table-header">
+            <h3>All Members</h3>
+            <span id="memberCount">0 Members</span>
+        </div>
+
+        <div class="search-box">
+            <input id="memberSearch"
+                placeholder="🔍 Search..."
+                oninput="renderMembers()">
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Mill</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Active</th>
+                    <th>Meals</th>
+                    <th>Joma</th>
+                    <th>Final Bill</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="memberTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- MEALS -->
+
+<section id="meals" class="page">
+
+    <div class="meal-toolbar">
+
+        <div class="meal-toolbar-top">
+
+            <div class="date-control">
+                <label>📅 Date</label>
+
+                <input id="mealDate"
+                    type="date"
+                    onchange="loadMealDate()">
+            </div>
+
+            <div class="quick-buttons">
+
+                <button class="btn btn-success"
+                    onclick="setAllMeals('full')">
+                    ✓ All Full
+                </button>
+
+                <button class="btn btn-warning"
+                    onclick="setAllMeals('half')">
+                    ½ All Half
+                </button>
+
+                <button class="btn btn-secondary"
+                    onclick="setAllMeals('none')">
+                    — All None
+                </button>
+
+                <button class="btn btn-info"
+                    onclick="copyPreviousDay()">
+                    📋 Copy Previous
+                </button>
+
+                <button class="btn btn-primary"
+                    onclick="saveCurrentDay()">
+                    💾 Save Day
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="meal-search">
+
+            <input id="mealSearch"
+                placeholder="🔍 Search member..."
+                oninput="renderMealCards()">
+
+        </div>
+
+    </div>
+
+    <div class="meal-summary">
+
+        <div class="summary-card">
+            <div class="emoji">👥</div>
+            <small>Members</small>
+            <div class="number" id="dailyMembers">0</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="emoji">🍳</div>
+            <small>Breakfast</small>
+            <div class="number" id="dailyBreakfast">0</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="emoji">🍛</div>
+            <small>Lunch</small>
+            <div class="number" id="dailyLunch">0</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="emoji">🌙</div>
+            <small>Dinner</small>
+            <div class="number" id="dailyDinner">0</div>
+        </div>
+
+        <div class="summary-card">
+            <div class="emoji">🍚</div>
+            <small>Total Meals</small>
+            <div class="number" id="dailyTotal">0</div>
+        </div>
+
+    </div>
+
+    <div class="meal-members" id="mealMembers"></div>
+
+</section>
+
+<!-- BAZAR -->
+
+<section id="bazar" class="page">
+
+    <div class="form-box">
+
+        <h3>Add Bazar</h3>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+
+                <label>Buyer</label>
+
+                <select id="bazarBuyer">
+                    <option value="">Select Buyer</option>
+                </select>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Item</label>
+
+                <input id="bazarItem"
+                    placeholder="Rice, Fish, Oil...">
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Amount</label>
+
+                <input id="bazarAmount"
+                    type="number"
+                    min="0"
+                    placeholder="500">
+
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-primary"
+                onclick="addBazar()">
+                🛒 Add Bazar
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <h3 style="margin-bottom:15px">
+            Bazar History
+        </h3>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Mill</th>
+                    <th>Buyer</th>
+                    <th>Item</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            <tbody id="bazarTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- EXPENSE -->
+
+<section id="expenses" class="page">
+
+    <div class="form-box">
+
+        <h3>Add Other Expense</h3>
+
+        <p style="color:var(--muted);margin-bottom:15px">
+            ℹ️ Total other expense will be divided
+            equally among active members.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+                <label>Expense Name</label>
+                <input id="expenseName"
+                    placeholder="Gas, Electricity...">
+            </div>
+
+            <div class="input-group">
+                <label>Amount</label>
+                <input id="expenseAmount"
+                    type="number"
+                    min="0"
+                    placeholder="1000">
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-primary"
+                onclick="addExpense()">
+                + Add Expense
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <h3 style="margin-bottom:15px">
+            Expense History
+        </h3>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Expense</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            <tbody id="expenseTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- DEPOSIT -->
+
+<section id="deposits" class="page">
+
+    <div class="form-box">
+
+        <h3>Member Joma / Payment</h3>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+
+                <label>Member</label>
+
+                <select id="depositMember">
+                    <option value="">Select Member</option>
+                </select>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Amount</label>
+
+                <input id="depositAmount"
+                    type="number"
+                    min="0"
+                    placeholder="5000">
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Note</label>
+
+                <input id="depositNote"
+                    placeholder="Monthly advance">
+
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button class="btn btn-success"
+                onclick="addDeposit()">
+                💵 Add Joma
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <h3 style="margin-bottom:15px">
+            Payment History
+        </h3>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Mill</th>
+                    <th>Member</th>
+                    <th>Amount</th>
+                    <th>Note</th>
+                    <th>Date</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            <tbody id="depositTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- CALCULATION -->
+
+<section id="calculation" class="page">
+
+    <div class="calculator">
+
+        <div class="calc-card">
+            <h3>Total Meals</h3>
+            <div class="big" id="calcMeals">0</div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Total Bazar</h3>
+            <div class="big">
+                ৳ <span id="calcBazar">0</span>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Other Expense</h3>
+            <div class="big">
+                ৳ <span id="calcExpense">0</span>
+            </div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Active Members</h3>
+            <div class="big" id="calcActiveMembers">0</div>
+        </div>
+
+        <div class="calc-card">
+            <h3>Expense / Member</h3>
+            <div class="big">
+                ৳ <span id="calcExpensePerMember">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="table-box" style="margin-top:20px">
+
+        <div class="table-header">
+
+            <h3>Final Member Calculation</h3>
+
+            <button class="btn btn-primary"
+                onclick="renderCalculation()">
+                🔄 Refresh
+            </button>
+
+        </div>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Mill</th>
+                    <th>Name</th>
+                    <th>Meals</th>
+                    <th>Meal Cost</th>
+                    <th>Other Exp.</th>
+                    <th>Joma</th>
+                    <th>Final Bill</th>
+                    <th>Refund</th>
+                    <th>Due</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="calculationTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- REPORT -->
+
+<section id="reports" class="page">
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-title">Members</div>
+            <div class="card-value" id="reportMembers">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Meals</div>
+            <div class="card-value" id="reportMeals">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Joma</div>
+            <div class="card-value">
+                ৳ <span id="reportDeposit">0</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Total Cost</div>
+            <div class="card-value">
+                ৳ <span id="reportCost">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="table-box">
+
+        <div class="table-header">
+
+            <h3>Monthly Report</h3>
+
+            <button class="btn btn-primary"
+                onclick="window.print()">
+                🖨️ Print
+            </button>
+
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Mill</th>
+                    <th>Member</th>
+                    <th>Meals</th>
+                    <th>Meal Cost</th>
+                    <th>Other Exp.</th>
+                    <th>Joma</th>
+                    <th>Refund</th>
+                    <th>Due</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="reportTable"></tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</main>
+
+<!-- MEMBER MODAL -->
+
+<div class="modal" id="memberModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Member Details</h2>
+
+            <button class="close"
+                onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+        <div id="memberProfile"></div>
+
+    </div>
+
+</div>
+
+<script src="messmanager.js"></script>
+
+</body>
+</html>
